@@ -1,0 +1,14 @@
+  
+dist 
+.DS_Store
+.vscode/
+
+# Dependency directory
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Optional npm cache directory
+.npm
