@@ -50,7 +50,6 @@ const Input = styled.input`
   color: #003d5b;
   font-size: 2vw;
   font-family: Muli;
-  border: none;
 `
 
 const Button = styled.button`
@@ -67,21 +66,20 @@ const Button = styled.button`
   }
 `
 
-const SignUp = ({ history }) => {
+const SignIn = ({ history }) => {
   return (
     <Wrapper>
       <Title onClick={() => history.push('/')}>Dogegram</Title>
       <Doge src={doge} alt='Doge' />
       <Form>
         <FormDiv>
-          <Input type='email' placeholder='Email' />
-          <Input type='text' placeholder='Username' />
+          <Input type='text' placeholder='Username or email' />
           <Input type='password' placeholder='Password' />
-          <Button>Sign Up</Button>
+          <Button>Sign In</Button>
         </FormDiv>
       </Form>
     </Wrapper>
   )
 }
 
-export default SignUp
+export default SignIn

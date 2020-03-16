@@ -5,6 +5,7 @@ import { createGlobalStyle } from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import GetStarted from './getStarted'
 import SignUp from './signUp'
+import SignIn from './signIn'
 import GlobalFonts from '../fonts/fonts'
 
 const GET_USERS = gql`
@@ -28,6 +29,7 @@ const App = () => {
       <GlobalFonts />
       <Route exact path='/' component={GetStarted} />
       <Route path='/signup' component={SignUp} />
+      <Route path='/signin' component={SignIn} />
     </BrowserRouter>
   )
 }

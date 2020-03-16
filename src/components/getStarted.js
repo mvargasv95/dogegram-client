@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
 
@@ -41,14 +42,23 @@ const Button2 = styled(Button)`
   margin: 10px 0;
 `
 
-const GetStarted = () => {
+const GetStarted = ({ history }) => {
+  const handleSignUpClick = e => {
+    e.preventDefault()
+    history.push('/signup')
+  }
+
+  const handleSignInClick = e => {
+    e.preventDefault()
+    history.push('/signin')
+  }
+
   return (
     <Wrapper>
       <Title>Dogegram</Title>
       <Doge src={doge} alt='doge' />
-
-      <Button1>Get Started</Button1>
-      <Button2>Log in</Button2>
+      <Button1 onClick={handleSignUpClick}>Get Started</Button1>
+      <Button2 onClick={handleSignInClick}>Log in</Button2>
     </Wrapper>
   )
 }
