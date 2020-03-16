@@ -9,6 +9,7 @@ const Wrapper = styled.section`
   background: url(${galaxy}) no-repeat;
   background-size: cover;
   align-items: center;
+  height: 100vh;
 `
 
 const Title = styled.h1`

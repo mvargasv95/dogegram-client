@@ -1,9 +1,10 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
-import GetStarted from './getStarted'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
+import { useQuery } from '@apollo/react-hooks'
+import GetStarted from './getStarted'
+import SignUp from './signUp'
 import GlobalFonts from '../fonts/fonts'
 
 const GET_USERS = gql`
@@ -26,6 +27,7 @@ const App = () => {
     <BrowserRouter>
       <GlobalFonts />
       <Route exact path='/' component={GetStarted} />
+      <Route path='/signup' component={SignUp} />
     </BrowserRouter>
   )
 }
