@@ -1,10 +1,12 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import { useCookies } from 'react-cookie'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
 
+// styled components
 const Wrapper = styled.div`
   display: flex;
   height: 100vh;
@@ -66,6 +68,7 @@ const Button = styled.button`
   }
 `
 
+// mutations
 const SIGN_UP = gql`
   mutation SignUp($input: SignUpInput!) {
     signUp(input: $input) {
@@ -75,6 +78,7 @@ const SIGN_UP = gql`
 `
 
 const SignUp = ({ history }) => {
+  const [cookies, setCookie] = useCookies(['token'])
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -82,21 +86,20 @@ const SignUp = ({ history }) => {
 
   const [signUp] = useMutation(SIGN_UP, {
     onCompleted({ signUp: { token } }) {
-      console.log('here', token)
       setName('')
       setUsername('')
       setEmail('')
       setPassword('')
+      setCookie('token', token, { path: '/' })
     },
     onError(error) {
-      console.error(error)
+      alert(error)
       return
     }
   })
 
   const handleSubmit = async e => {
     e.preventDefault()
-    console.log('here', e)
     if (!name || !username || !email || !password) {
       alert('Please fill out all of the fields')
       return

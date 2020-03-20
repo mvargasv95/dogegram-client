@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
@@ -73,8 +73,8 @@ const SignIn = ({ history }) => {
       <Title onClick={() => history.push('/')}>Dogegram</Title>
       <Doge src={doge} alt='Doge' />
       <Form onSubmit={handleSubmit}>
-        <Input type='text' placeholder='Username or email' />
-        <Input type='password' placeholder='Password' />
+        <Input type='text' placeholder='Username or email' value={login} onChange={e => setLogin(e.target.value)} />
+        <Input type='password' placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} />
         <Button>Sign In</Button>
       </Form>
     </Wrapper>

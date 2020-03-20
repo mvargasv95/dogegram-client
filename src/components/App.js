@@ -2,6 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
+import { CookiesProvider } from 'react-cookie'
 import GetStarted from './getStarted'
 import SignUp from './signUp'
 import SignIn from './signIn'
@@ -25,10 +26,12 @@ const App = () => {
   // console.log('here', users)
   return (
     <BrowserRouter>
-      <GlobalFonts />
-      <Route exact path='/' component={GetStarted} />
-      <Route path='/signup' component={SignUp} />
-      <Route path='/signin' component={SignIn} />
+      <CookiesProvider>
+        <GlobalFonts />
+        <Route exact path='/' component={GetStarted} />
+        <Route path='/signup' component={SignUp} />
+        <Route path='/signin' component={SignIn} />
+      </CookiesProvider>
     </BrowserRouter>
   )
 }
