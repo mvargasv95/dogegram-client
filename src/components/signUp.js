@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
+import gql from 'graphql-tag'
+import { useMutation } from '@apollo/react-hooks'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
 
@@ -36,9 +38,6 @@ const Form = styled.form`
   @media (max-width: 768px) {
     width: 50%;
   }
-`
-
-const FormDiv = styled.div`
   display: flex;
   flex-direction: column;
 `
@@ -67,18 +66,85 @@ const Button = styled.button`
   }
 `
 
+const SIGN_UP = gql`
+  mutation SignUp($input: SignUpInput!) {
+    signUp(input: $input) {
+      token
+    }
+  }
+`
+
 const SignUp = ({ history }) => {
+  const [name, setName] = useState('')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const [signUp] = useMutation(SIGN_UP, {
+    onCompleted({ signUp: { token } }) {
+      console.log('here', token)
+      setName('')
+      setUsername('')
+      setEmail('')
+      setPassword('')
+    },
+    onError(error) {
+      console.error(error)
+      return
+    }
+  })
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    console.log('here', e)
+    if (!name || !username || !email || !password) {
+      alert('Please fill out all of the fields')
+      return
+    }
+    const input = { name, username, email, password }
+    await signUp({
+      variables: { input }
+    })
+  }
+
   return (
     <Wrapper>
       <Title onClick={() => history.push('/')}>Dogegram</Title>
       <Doge src={doge} alt='Doge' />
-      <Form>
-        <FormDiv>
-          <Input type='email' placeholder='Email' />
-          <Input type='text' placeholder='Username' />
-          <Input type='password' placeholder='Password' />
-          <Button>Sign Up</Button>
-        </FormDiv>
+      <Form onSubmit={handleSubmit}>
+        <Input
+          type='text'
+          placeholder='Name'
+          required
+          name='name'
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+        <Input
+          type='email'
+          placeholder='Email'
+          required
+          name='email'
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <Input
+          type='text'
+          placeholder='Username'
+          required
+          name='username'
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+        />
+        <Input
+          type='password'
+          placeholder='Password'
+          required
+          name='password'
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <Button>Sign Up</Button>
       </Form>
     </Wrapper>
   )

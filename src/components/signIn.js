@@ -31,14 +31,11 @@ const Doge = styled.img`
   margin-bottom: 50px;
 `
 
-const Form = styled.form`
+const Form = styled.div`
   width: 40%;
   @media (max-width: 768px) {
     width: 50%;
   }
-`
-
-const FormDiv = styled.div`
   display: flex;
   flex-direction: column;
 `
@@ -50,6 +47,7 @@ const Input = styled.input`
   color: #003d5b;
   font-size: 2vw;
   font-family: Muli;
+  border: none;
 `
 
 const Button = styled.button`
@@ -67,16 +65,17 @@ const Button = styled.button`
 `
 
 const SignIn = ({ history }) => {
+  const handleSubmit = () => {
+    alert('f')
+  }
   return (
     <Wrapper>
       <Title onClick={() => history.push('/')}>Dogegram</Title>
       <Doge src={doge} alt='Doge' />
-      <Form>
-        <FormDiv>
-          <Input type='text' placeholder='Username or email' />
-          <Input type='password' placeholder='Password' />
-          <Button>Sign In</Button>
-        </FormDiv>
+      <Form onSubmit={handleSubmit}>
+        <Input type='text' placeholder='Username or email' />
+        <Input type='password' placeholder='Password' />
+        <Button>Sign In</Button>
       </Form>
     </Wrapper>
   )
