@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import gql from 'graphql-tag'
+import { useMutation } from '@apollo/react-hooks'
+import { useCookies } from 'react-cookie'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
 
@@ -31,7 +34,7 @@ const Doge = styled.img`
   margin-bottom: 50px;
 `
 
-const Form = styled.div`
+const Form = styled.form`
   width: 40%;
   @media (max-width: 768px) {
     width: 50%;
@@ -64,17 +67,62 @@ const Button = styled.button`
   }
 `
 
+const SIGN_IN = gql`
+  mutation SignIn($input: SignInInput!) {
+    signIn(input: $input) {
+      token
+    }
+  }
+`
 const SignIn = ({ history }) => {
-  const handleSubmit = () => {
-    alert('f')
+  // hooks
+  const [cookies, setCookie] = useCookies(['token'])
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const [signIn] = useMutation(SIGN_IN, {
+    onCompleted({ signIn: { token } }) {
+      setEmail('')
+      setPassword('')
+      setCookie('token', token, { path: '/' })
+    },
+    onError(error) {
+      alert(error)
+      return
+    }
+  })
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if (!email || !password) {
+      alert('Please fill out all of the fields')
+      return
+    }
+    const input = { email, password }
+    console.log('here', email, password)
+    await signIn({
+      variables: { input }
+    })
   }
   return (
     <Wrapper>
       <Title onClick={() => history.push('/')}>Dogegram</Title>
       <Doge src={doge} alt='Doge' />
       <Form onSubmit={handleSubmit}>
-        <Input type='text' placeholder='Username or email' value={login} onChange={e => setLogin(e.target.value)} />
-        <Input type='password' placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} />
+        <Input
+          type='email'
+          placeholder='Email address'
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          type='password'
+          placeholder='Password'
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
         <Button>Sign In</Button>
       </Form>
     </Wrapper>
