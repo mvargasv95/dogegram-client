@@ -115,6 +115,7 @@ const SignIn = ({ history }) => {
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
+          autoFocus
         />
         <Input
           type='password'
