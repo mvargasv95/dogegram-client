@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
 

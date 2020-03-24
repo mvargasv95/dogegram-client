@@ -1,7 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import gql from 'graphql-tag'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
+import jwt from 'jsonwebtoken'
 import GetStarted from './getStarted'
 import SignUp from './signUp'
 import SignIn from './signIn'
@@ -20,12 +21,30 @@ const GET_USERS = gql`
   }
 `
 
+const verifyToken = token =>
+  new Promise((resolve, reject) => {
+    jwt.verify(token, 'secret', (err, payload) => {
+      if (err) return reject(err)
+      resolve(payload)
+    })
+  })
+
 const App = () => {
   // const users = useQuery(GET_USERS)
   // if (users.loading) return <h1>Loading</h1>
   // if (users.error) return <h1>Error!</h1>
   // console.log('here', users)
-  const { token } = useContext(AuthContext)
+  const { token, removeToken } = useContext(AuthContext)
+  useEffect(() => {
+    ;(async () => {
+      try {
+        await verifyToken(token)
+      } catch (e) {
+        removeToken()
+      }
+    })()
+  }, [token])
+
   return (
     <BrowserRouter>
       <GlobalFonts />
