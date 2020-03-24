@@ -5,7 +5,13 @@ const AuthContext = createContext()
 
 const AuthContextProvider = ({ children }) => {
   const [cookies, setCookie] = useCookies(['token'])
-  return <AuthContext.Provider value={cookies.token}>{children}</AuthContext.Provider>
+  const { token } = cookies
+
+  const setToken = newToken => {
+    setCookie('token', newToken, { path: '/' })
+  }
+
+  return <AuthContext.Provider value={{ token, setToken }}>{children}</AuthContext.Provider>
 }
 
 export { AuthContext, AuthContextProvider }

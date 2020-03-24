@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
-import { useCookies } from 'react-cookie'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
+import { AuthContext } from '../context/auth'
 
 const Wrapper = styled.div`
   display: flex;
@@ -76,15 +76,16 @@ const SIGN_IN = gql`
 `
 const SignIn = ({ history }) => {
   // hooks
-  const [cookies, setCookie] = useCookies(['token'])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { setToken } = useContext(AuthContext)
 
   const [signIn] = useMutation(SIGN_IN, {
     onCompleted({ signIn: { token } }) {
       setEmail('')
       setPassword('')
-      setCookie('token', token, { path: '/' })
+      setToken(token)
+      history.push('/')
     },
     onError(error) {
       alert(error)
@@ -99,7 +100,6 @@ const SignIn = ({ history }) => {
       return
     }
     const input = { email, password }
-    console.log('here', email, password)
     await signIn({
       variables: { input }
     })

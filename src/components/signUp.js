@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
-import { useCookies } from 'react-cookie'
 import doge from '../assets/doge.png'
 import galaxy from '../assets/galaxy.jpg'
+import { AuthContext } from '../context/auth'
 
 // styled components
 const Wrapper = styled.div`
@@ -78,11 +78,12 @@ const SIGN_UP = gql`
 `
 
 const SignUp = ({ history }) => {
-  const [cookies, setCookie] = useCookies(['token'])
+  //hooks
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { setToken } = useContext(AuthContext)
 
   const [signUp] = useMutation(SIGN_UP, {
     onCompleted({ signUp: { token } }) {
@@ -90,7 +91,8 @@ const SignUp = ({ history }) => {
       setUsername('')
       setEmail('')
       setPassword('')
-      setCookie('token', token, { path: '/' })
+      setToken(token)
+      history.push('/')
     },
     onError(error) {
       alert(error)
@@ -122,6 +124,7 @@ const SignUp = ({ history }) => {
           name='name'
           value={name}
           onChange={e => setName(e.target.value)}
+          autoFocus
         />
         <Input
           type='email'
